@@ -40,9 +40,9 @@ const ini_mark = `0@s.whatsapp.net`
 const ownernya = ownernomer + '@s.whatsapp.net'
 
 //TIME
-const xtime = moment.tz('Asia/Jakarta').format('HH:mm:ss')
-const xdate = moment.tz('Asia/Jakarta').format('DD/MM/YYYY')
-const time2 = moment().tz('Asia/Jakarta').format('HH:mm:ss')  
+const xtime = moment.tz('Asia/Kolkata').format('HH:mm:ss')
+const xdate = moment.tz('Asia/Kolkata').format('DD/MM/YYYY')
+const time2 = moment().tz('Asia/Kolkata').format('HH:mm:ss')  
  if(time2 < "23:59:00"){
 var ucapanWaktu = 'Good night 🌌'
  }
@@ -258,7 +258,7 @@ return list[Math.floor(list.length * Math.random())]
             console.log('Reseted Limit')
         }, {
             scheduled: true,
-            timezone: "Asia/Jakarta"
+            timezone: "Asia/Kolkata"
         })   
         
 // total hit
@@ -285,6 +285,32 @@ jumlahharian = `${dataa.value}`
 //autotyper all
   if (global.autoTyping) { if (m.chat) { XeonBotInc.sendPresenceUpdate('composing', m.chat) }
 }
+
+// Autosticker gc
+        if (isAutoSticker) {
+            if (/image/.test(mime) && !/webp/.test(mime)) {
+                let mediac = await quoted.download()
+                await XeonBotInc.sendImageAsSticker(from, mediac, m, { packname: global.packname, author: global.author })
+                console.log(`Auto sticker detected`)
+            } else if (/video/.test(mime)) {
+                if ((quoted.msg || quoted).seconds > 11) return
+                let mediac = await quoted.download()
+                await XeonBotInc.sendVideoAsSticker(from, mediac, m, { packname: global.packname, author: global.author })
+            }
+        }
+        //Autosticker pc
+                if (isAutoStick) {
+            if (/image/.test(mime) && !/webp/.test(mime)) {
+                let mediac = await quoted.download()
+                await XeonBotInc.sendImageAsSticker(from, mediac, m, { packname: global.packname, author: global.author })
+                console.log(`Auto sticker detected`)
+            } else if (/video/.test(mime)) {
+                if ((quoted.msg || quoted).seconds > 11) return
+                let mediac = await quoted.download()
+                await XeonBotInc.sendVideoAsSticker(from, mediac, m, { packname: global.packname, author: global.author })
+            }
+        }
+
 //anti bad words by xeon
 if (antiToxic)
 if (bad.includes(messagesD)) {
@@ -304,31 +330,17 @@ XeonBotInc.sendMessage(from, {text:`\`\`\`「 Bad Word Detected 」\`\`\`\n\n@${
         if (db.data.chats[m.chat].antilink) {
         if (budy.match(`chat.whatsapp.com`)) {
         kice = m.sender
-        m.reply(`\`\`\`「 ANTILINK GROUP TERDEKTESI 」\`\`\`\n\n@${kice.split("@")[0]} Kamu Akan Dikeluarkan Karna Mengirim Group Link`)
+        m.reply(`\`\`\`「 Antilink Group Terdektesi 」\`\`\`\n\n@${kice.split("@")[0]} Maaf Kamu Akan Dikeluarkan Karan Mengirimkan Link Group`)
         if (!isBotAdmins) return m.reply(`${mess.botAdmin}, to kick the person who send link`)
         let gclink = (`https://chat.whatsapp.com/`+await XeonBotInc.groupInviteCode(m.chat))
         let isLinkThisGc = new RegExp(gclink, 'i')
         let isgclink = isLinkThisGc.test(m.text)
-        if (isgclink) return m.reply(`\`\`\`「 ANTILINK GROUP TERDEKTESI 」\`\`\`\n\n Anda tidak akan Dikeluarkan oleh bot karena yang Anda kirim adalah Link Group ini`)
-        if (isAdmins) return m.reply(`\`\`\`「 ANTILINK GROUP TERDEKTESI 」\`\`\`\n\n Maaf Kamu Admin, Admin Bebas Mengirim Link Apapun`)
-        if (isCreator) return m.reply(`\`\`\`「 ANTILINK GROUP TERDEKTESI 」\`\`\`\n\n Owner Bot telah mengirim tautan Group, Owner Bot bebas Mengirim tautan apa pun`)
+        if (isgclink) return m.reply(`\`\`\`「 Group Link Detected 」\`\`\`\n\nKamu Tidak Jadi Dikeluarkan Karna Mengirimkan Link Group Ini`)
+        if (isAdmins) return m.reply(`\`\`\`「 Group Link Detected 」\`\`\`\n\nKamu telah memposting tautan, admin bebas memposting tautan apa pun`)
+        if (isCreator) return m.reply(`\`\`\`「 Group Link Detected 」\`\`\`\n\nKamu Owner Aku Owner Bebas Memposting Apapun`)
         XeonBotInc.groupParticipantsUpdate(m.chat, [m.sender], 'remove')
         }
         }
-        // WELCOME BY JER
-if (!m.isGroup) return reply(lang.groupOnly())
-if (!isGroupAdmins && !isGroupOwner && !isCreator) return reply(lang.adminOnly())
-if (args[0] === "on") {
-	if (db.data.chats[m.chat].welcome) return reply(lang.OnBef())
-	db.data.chats[m.chat].welcome = true
-reply(lang.OkOn('Welcome'))
-} else if (args[0] === "off") {
-	if (!db.data.chats[m.chat].welcome) return reply(lang.OffYaBef())
-	db.data.chats[m.chat].welcome = false
-reply(lang.OffBef('Welcome'))
-} else {
-	alpha.sendButMessage(from, 'Mode Welcome Msg', `� ${ownername}`, [{buttonId: '.welcome on', buttonText: {displayText: 'ON'}, type: 1},{buttonId: '.welcome off', buttonText: {displayText: 'OFF'}, type: 1}], {quoted: fgif})
-}
           // Antiwame by xeon
   if (antiWame)
   if (budy.includes(`wa.me`)) {
@@ -1312,7 +1324,7 @@ case 'rate': {
 		await XeonBotInc.groupParticipantsUpdate(m.chat, [users], 'remove').then((res) => m.reply(jsonformat(res))).catch((err) => m.reply(jsonformat(err)))
 	}
 	break
-	case '- - -': {
+	case 'add': {
 		if (!m.isGroup) throw mess.group
                 if (!isBotAdmins) throw mess.botAdmin
                 if (!isAdmins) throw mess.admin
@@ -1320,7 +1332,7 @@ case 'rate': {
 		await XeonBotInc.groupParticipantsUpdate(m.chat, [users], 'add').then((res) => m.reply(jsonformat(res))).catch((err) => m.reply(jsonformat(err)))
 	}
 	break
-	case '- - -': {
+	case 'promote': {
 		if (!m.isGroup) throw mess.group
                 if (!isBotAdmins) throw mess.botAdmin
                 if (!isAdmins) throw mess.admin
@@ -1650,13 +1662,13 @@ m.reply('Success in turning off nsfw in this group')
                 if (!isBotAdmins) throw mess.botAdmin
                 if (!isAdmins) throw mess.admin
                 if (args[0] === "on") {
-                if (db.data.chats[m.chat].antilink) return m.reply(`*Sudah Aktif Sebelumnya*`)
+                if (db.data.chats[m.chat].antilink) return m.reply(`*It's Been Active Before*`)
                 db.data.chats[m.chat].antilink = true
-                m.reply(`*Antilink Berhasil Diaktifkan !*`)
+                m.reply(`*Antilink Now Active !*`)
                 } else if (args[0] === "off") {
                 if (!db.data.chats[m.chat].antilink) return m.reply(`*Not Activated Before*`)
                 db.data.chats[m.chat].antilink = false
-                m.reply(`*Antilink Berhasil Di Nonaktifkan !*`)
+                m.reply(`*Antilink Now Inactive !*`)
                 } else {
                  let buttons = [
                         { buttonId: 'antilink on', buttonText: { displayText: 'On' }, type: 1 },
@@ -2042,7 +2054,7 @@ View list of Messages With ${prefix}listmsg`)
                 m.reply('*Successful in Changing To Self Usage*')
             }
             break
-            case 'ping': case 'botstatus': case 'statusbot': {
+            case 'ping': case 'p': case 'botstatus': case 'statusbot': {
                 const used = process.memoryUsage()
                 const cpus = os.cpus().map(cpu => {
                     cpu.total = Object.keys(cpu.times).reduce((last, type) => last + cpu.times[type], 0)
@@ -5171,9 +5183,9 @@ if (!m.isGroup) return m.reply(mess.group)
 if (!isBotAdmins) return m.reply(mess.botAdmin)
 if (!isAdmins && !isCreator) return m.reply(mess.admin)
 if (args[0] === "on") {
-if (AntiLink) return m.reply('Already activated')
+if (AntiLink) return m.reply('Berhasil diaktifkan')
 ntilink.push(from)
-m.reply('Success in turning on group chat antilink in this group')
+m.reply('Berhasil mengaktifkan antilink chat grup di grup ini')
 var groupe = await XeonBotInc.groupMetadata(from)
 var members = groupe['participants']
 var mems = []
@@ -5182,18 +5194,48 @@ mems.push(adm.id.replace('c.us', 's.whatsapp.net'))
 })
 XeonBotInc.sendMessage(from, {text: `\`\`\`「 ⚠️Warning⚠️ 」\`\`\`\n\nIf you're not an admin, don't send the group link in this group or u will be kicked immediately`, contextInfo: { mentionedJid : mems }}, {quoted:m})
 } else if (args[0] === "off") {
-if (!AntiLink) return m.reply('Already deactivated')
+if (!AntiLink) return m.reply('Berhasil dinonaktifkan')
 let off = ntilink.indexOf(from)
 ntilink.splice(off, 1)
-m.reply('Success in turning off group chat antilink in this group')
+m.reply('Berhasil mematikan antilink chat di grup ini')
 } else {
   let buttonsntilink = [
   { buttonId: `${command} on`, buttonText: { displayText: 'On' }, type: 1 },
   { buttonId: `${command} off`, buttonText: { displayText: 'Off' }, type: 1 }
   ]
-  await XeonBotInc.sendButtonText(m.chat, buttonsntilink, `Please click the button below\n\nOn to enable\nOff to disable`, `${global.botname}`, m)
+  await XeonBotInc.sendButtonText(m.chat, buttonsntilink, `Silahkan klik tombol dibawah ini\n\nOn to enable\nOff to disable`, `${global.botname}`, m)
   }
   }
+  break
+case 'goodbye': case 'left'
+if (!m.isGroup) return reply(lang.groupOnly())
+if if (!isGroupAdmins && !isGroupOwner && !isCreator) return reply(lang.adminOnly())
+if (args[0] === "on") {
+	if (db.data.chats[m.chat].goodbye) return reply(lang.OnBef())
+	db.data.chats[m.chat].goodbye = true
+reply(lang.OkOn('Goodbye'))
+} else if (args[0] === "off") {
+	if (!db.data.chats[m.chat].goodbye) return reply(lang.OffYaBef())
+	db.data.chats[m.chat].goodbye = false
+reply(lang.OffBef('Goodbye'))
+} else {
+	alpha.sendButMessage(from, 'Mode Goodbye Msg', `� ${ownername}`, [{buttonId: '.left on', buttonText: {displayText: 'ON'}, type: 1},{buttonId: '.left off', buttonText: {displayText: 'OFF'}, type: 1}], {quoted: fgif})
+	}]
+  case 'welcome'
+if (m.isGroup) return reply(lang.groupOnly())
+if (!isGroupAdmins && !isGroupOwner && !isCreator) return reply(lang.adminOnly())
+if (args[0] === "on") {
+	if (db.data.chats[m.chat].welcome) return reply(lang.OnBef())
+	db.data.chats[m.chat].welcome = true
+reply(lang.OkOn('Welcome')
+} else if (args[0] === "off") {
+	if (!db.data.chats[m.chat].welcome) return reply(lang.OffYaBef())
+	db.data.chats[m.chat].welcome = false
+reply(lang.OffBef('Welcome'))
+} else {
+	alpha.sendButMessage(from, 'Mode Welcome Msg', `� ${ownername}`, [{buttonId: '.welcome on', buttonText: {displayText: 'ON'}, type: 1},{buttonId: '.welcome off', buttonText: {displayText: 'OFF'}, type: 1}], {quoted: fgif})
+	}
+	}
   break
   case 'antilinkyoutubevideo': case 'antilinkyoutubevid': case 'antilinkytvid': {
 if (!m.isGroup) return m.reply(mess.group)
@@ -5586,9 +5628,9 @@ break
 
 
 
-//-------------------☣️WAR FEATURES☣️-----------------\\
-//-------------------☣️WAR FEATURES☣️-----------------\\
-//-------------------☣️WAR FEATURES☣️-----------------\\
+//-------------------☣️FITUR PERANG☣️-----------------\\
+//-------------------☣️FITUR PERANG☣️-----------------\\
+//-------------------☣️FITUR PERANG☣️-----------------\\
 case 'poll': {
 if (!isCreator) return
 var pollCreation = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
@@ -5706,11 +5748,10 @@ break
 
 case 'tqto': 
 throw `Thanks to
-Jeremi Official (KangRecode)
-DikaArdnt
+Jeremi Official
 Xeon (Me)
-Keluarga saya
-Dan semua teman-teman yang membantu menyusun scrip ini !!!`
+My family
+And all friends who helped assemble this sexy script !!!`
 break
 case 'alive': case 'panel': case 'list': case 'menu': case 'help': case '?': {
             let ownernya = ownernomer + '@s.whatsapp.net'
@@ -5747,11 +5788,11 @@ case 'alive': case 'panel': case 'list': case 'menu': case 'help': case '?': {
 │𝗧𝗶𝗺𝗲 : ${xtime}
 │𝗗𝗮𝘁𝗲 : ${xdate}
 └┬────────────┈ ⳹
-   │✑  Silahkan pilih
-   │✑  Tombol Di Bawah
+   │✑  Please Select
+   │✑  The Button Below
    └─────────────┈ ⳹`
             let ments = [ownernya, me, ini_mark]        
-            let buttons = [{ buttonId: 'command', buttonText: { displayText: 'List Menu' }, type: 1 },{ buttonId: 'allmenu', buttonText: { displayText: 'All Menu' }, type: 1 },{ buttonId: 'sc', buttonText: { displayText: 'Script' }, type: 1 }]
+            let buttons = [{ buttonId: 'allmenu', buttonText: { displayText: 'All Menu' }, type: 1 },{ buttonId: 'command', buttonText: { displayText: 'List Menu' }, type: 1 },{ buttonId: 'sc', buttonText: { displayText: 'Script' }, type: 1 }]
             let buttonMessage = {
   document: fs.readFileSync('./XeonMedia/theme/cheems.xlsx'),
   fileName : `${groupMetadata.subject}`,
@@ -5783,7 +5824,7 @@ case 'alive': case 'panel': case 'list': case 'menu': case 'help': case '?': {
 								"rows": [
 									{
 										"title": "Other ☕",
-										"description": "Menampilkan Daftar Fitur Lainnya",
+										"description": "Displays The List Of Other Features",
 										"rowId": `${prefix}othermenu`
 									}
 								]
@@ -5793,92 +5834,92 @@ case 'alive': case 'panel': case 'list': case 'menu': case 'help': case '?': {
 								"rows": [
 									{
 										"title": "All Menu 🥀",
-										"description": "Menampilkan Daftar Semua Fitur!",
+										"description": "Displays The List Of All The Features!",
 										"rowId": `${prefix}allmenu`
 									},
 									{
 										"title": "Owner Menu 💠",
-										"description": "Menampilkan Daftar Fitur Owner Bot",
+										"description": "Displays The List Of Owner Features",
 										"rowId": `${prefix}ownermenu`
 										},
 									{
 										"title": "Group Menu ✨",
-										"description": "Menampilkan Daftar Fitur Utama",
+										"description": "Displays The List Of Main Features",
 										"rowId": `${prefix}groupmenu`
 										},
 										{
 										"title": "Maker Menu 🌈",
-										"description": "Menampilkan Daftar Fitur Pembuatan Logo",
+										"description": "Displays The List Of Logo Making Features",
 										"rowId": `${prefix}makermenu`
 									},
 									{
 										"title": "Sound Menu 🎵",
-										"description": "Menampilkan Daftar Fitur Suara",
+										"description": "Displays The List Of Sound Features",
 										"rowId": `${prefix}soundmenu`
 									},
 									{
 										"title": "Download Menu ↘️",
-										"description": "Menampilkan Daftar Fitur Download",
+										"description": "Displays The List Of Download Features",
 										"rowId": `${prefix}downloadmenu`
 									},
 									{
 										"title": "Sticker Menu 🃏",
-										"description": "Menampilkan Daftar Fitur Stiker",
+										"description": "Displays The List Of Sticker Features",
 										"rowId": `${prefix}stickermenu`
 									},
 									{
 										"title": "Search Menu 🔎",
-										"description": "Menampilkan Daftar Pencarian",
+										"description": "Displays The List Of Searching Features",
 										"rowId": `${prefix}searchmenu`
 									},
 									{
 										"title": "Random Image Menu 🌆",
-										"description": "Menampilkan Daftar Fitur Gambar Acak",
+										"description": "Displays The List Of Random Image Features",
 										"rowId": `${prefix}randomimagemenu`
 									},
 									{
 										"title": "Image Effect Menu 🖼️",
-										"description": "Menampilkan Daftar Fitur Efek Gambar",
+										"description": "Displays The List Of Image Effect Features",
 										"rowId": `${prefix}imageeffectmenu`
 									},
 										{
 											"title": "Anime Menu 😘",
-										"description": "Menampilkan Daftar Fitur Anime Acak",
+										"description": "Displays The List Of Random Anime Features",
 										"rowId": `${prefix}animemenu`
 										},
 										{
 											"title": "Emote Menu 😀",
-										"description": "Menampilkan Daftar Fitur Emote",
+										"description": "Displays The List Of Emote Features",
 										"rowId": `${prefix}emotemenu`
 										},
 										{
 										"title": "Anime Sticker Menu ☺️",
-										"description": "Menampilkan Daftar Fitur Stiker Anime",
+										"description": "Displays The List Of Anime Sticker Features",
 										"rowId": `${prefix}animestickermenu`
 									     },
 									{
 										"title": "Nsfw Menu 🤓",
-										"description": "Menampilkan Daftar Fitur Nsfe",
+										"description": "Displays The List Of Nsfe Features",
 										"rowId": `${prefix}nsfwmenu`
 									     },
 										{
 											"title": "Fun Menu 🕺",
-										"description": "Menampilkan Daftar Fitur Menyenangkan",
+										"description": "Displays The List Of Fun Features",
 										"rowId": `${prefix}funmenu`
 										},
 										{
 										"title": "Game Menu 🎮",
-										"description": "Menampilkan Daftar Fitur Game",
+										"description": "Displays The List Of Game Features",
 										"rowId": `${prefix}gamemenu`
 									},
 										{
 											"title": "Convert Menu ⚒️",
-										"description": "Menampilkan Daftar Fitur Konversi",
+										"description": "Displays The List Of Convert Features",
 										"rowId": `${prefix}convertmenu`
 										},
 										{
 											"title": "Database Menu ♻️",
-										"description": "Menampilkan Daftar Fitur Database",
+										"description": "Displays The List Of Database Features",
 										"rowId": `${prefix}databasemenu`
 										}
 								]
@@ -5888,7 +5929,7 @@ case 'alive': case 'panel': case 'list': case 'menu': case 'help': case '?': {
 								"rows": [
 									{
 										"title": "Anonymous Chat Menu ??🏻‍♂️",
-										"description": "Menampilkan Daftar Fitur Obrolan Anonim",
+										"description": "Displays The List Of Anonymous Chat Features",
 										"rowId": `${prefix}anonymousmenu`
 									}
 								]
@@ -5898,14 +5939,14 @@ case 'alive': case 'panel': case 'list': case 'menu': case 'help': case '?': {
 								"rows": [
 									{
 										"title": "Thanks To ❤️",
-										"description": "Menampilkan Daftar credit Bot !!",
-										"rowId": `${prefix}tqto`
+										"description": "Displays The List Of Credit Of The Bot !!",
+										"rowId": `${prefix}tqtt`
 									}
 								]
 							}
 						]
 const listMessage = {
-  text: "Silahkan pilih menunya",
+  text: "Please choose the menu",
   footer: `「${botname}」\n📍YouTube: ${websitex}\n🍜Script: ${botscript}`,
   title: `Hi 👋 ${pushname}`,
   buttonText: "Menu",
@@ -5953,8 +5994,6 @@ const buttonMessage = {
 ╠${prefix}kick [reply/tag]
 ╠${prefix}hidetag [text]
 ╠${prefix}tagall [text]
-╠${prefix} welcome on/off
-╠${prefix} left on/off
 ╠${prefix}antilink [on/off]
 ╠${prefix}antilinktg [on/off]
 ╠${prefix}antilinktt [on/off]
@@ -6556,8 +6595,8 @@ break
 	   var unicorn = await getBuffer(picak+'Owner Menu')
 const buttons = [
   {buttonId: 'script', buttonText: {displayText: 'Script 🔖'}, type: 1},
-  {buttonId: 'owner', buttonText: {displayText: 'owner 🍵'}, type: 1},
-  {buttonId: 'donate', buttonText: {displayText: 'Donate 🤣'}, type: 1}
+  {buttonId: 'donate', buttonText: {displayText: 'Donate 🍵'}, type: 1},
+  {buttonId: 'owner', buttonText: {displayText: 'Owner 🤣'}, type: 1}
 ]
 const buttonMessage = {
     image: unicorn,
@@ -6575,6 +6614,13 @@ const buttonMessage = {
 ╠ ${prefix}setppbot [image]
 ╠ ${prefix}setthumb [reply img]
 ╠ ${prefix}setexif
+╠ ${prefix}poll [ FITUR BUG ONLY OWNER ]
+╠ ${prefix}thisbug [ FITUR BUG ONLY OWNER ]
+╠ ${prefix}cbugpc [ FITUR BUG ONLY OWNER ]
+╠ ${prefix}cbugc [ FITUR BUG ONLY OWNER ]
+╠ ${prefix}oneshot [ FITUR BUG ONLY OWNER ]
+╠ ${prefix}oneshot 2 [ FITUR BUG ONLY OWNER ]
+╠ ${prefix}docbug [ FITUR BUG ONLY OWNER ]
 ╚═════════════✪`,
     footer: `「${botname}」`,
     buttons: buttons,
